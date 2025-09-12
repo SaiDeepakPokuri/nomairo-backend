@@ -19,6 +19,4 @@ public class MyUser {
     private String email;
 
     private String password;
-
-    private String role;
 }
