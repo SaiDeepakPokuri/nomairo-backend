@@ -13,6 +13,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
+   
+
     @Autowired
     private UserService userService;
 
@@ -29,10 +31,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestParam String email, @RequestParam String password) {
         try {
-            MyUser user = userService.loginUser(email, password);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            String token = userService.loginUser(email, password);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

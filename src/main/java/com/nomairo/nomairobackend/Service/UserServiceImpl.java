@@ -1,6 +1,7 @@
 package com.nomairo.nomairobackend.Service;
 
 import com.nomairo.nomairobackend.Domain.MyUser;
+import com.nomairo.nomairobackend.Jwt.JwtUtil;
 import com.nomairo.nomairobackend.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public MyUser registerUser(MyUser user) {
@@ -48,13 +53,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyUser loginUser(String email, String password) {
+    public String loginUser(String email, String password) {
         MyUser myUser = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         if (!myUser.getPassword().equals(password)) {
             throw new RuntimeException("Invalid password");
         }
-        return myUser;
+        return jwtUtil.generateToken(myUser);
     }
 
     @Override
